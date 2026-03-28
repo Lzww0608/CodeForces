@@ -34,6 +34,11 @@ func solve(in *bufio.Reader, out *bufio.Writer) {
 		deg[v]++
 	}
 
+	if n == 1 {
+		fmt.Fprintln(out, 0)
+		return
+	}
+
 	time := make([]int, n)
 	for i, d := range deg {
 		if d == 1 {
