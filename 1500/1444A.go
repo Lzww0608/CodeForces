@@ -18,45 +18,38 @@ func main() {
 }
 
 func solve(in *bufio.Reader, out *bufio.Writer) {
-	var p, q int
+	var p, q int64
 	fmt.Fscan(in, &p, &q)
-	if p < q || p%q != 0 {
+	if p%q != 0 {
 		fmt.Fprintln(out, p)
 		return
 	}
 
-	x := p
-	cnt := make(map[int]int)
-	for i := 2; i <= p; i++ {
-		if p%i == 0 {
-			a := 0
-			for p%i == 0 {
-				p /= i
-				a++
+	// Factorize q (q <= 1e9), then try removing each prime factor from p
+	// until the number is no longer divisible by q.
+	primes := make([]int64, 0)
+	tmp := q
+	for i := int64(2); i*i <= tmp; i++ {
+		if tmp%i == 0 {
+			primes = append(primes, i)
+			for tmp%i == 0 {
+				tmp /= i
 			}
-			cnt[i] = a
 		}
 	}
+	if tmp > 1 {
+		primes = append(primes, tmp)
+	}
 
-	ans := 1
-	for k, v := range cnt {
-		a := 0
-		for t := q; t%k == 0; t /= k {
-			a++
+	ans := int64(1)
+	for _, prime := range primes {
+		cur := p
+		for cur%q == 0 {
+			cur /= prime
 		}
-		ans = max(ans, x/pow(k, v-a+1))
+		if cur > ans {
+			ans = cur
+		}
 	}
 	fmt.Fprintln(out, ans)
-}
-
-func pow(a, b int) int {
-	res := 1
-	for b > 0 {
-		if b&1 == 1 {
-			res *= a
-		}
-		a *= a
-		b >>= 1
-	}
-	return res
 }
