@@ -32,8 +32,10 @@ func solve(in *bufio.Reader, out *bufio.Writer) {
 		sum += ans
 	}
 
-	if (sum-d)&1 == 1 {
+	for (sum-d)&1 == 1 {
 		ans++
+		sum += ans
 	}
+
 	fmt.Fprintln(out, ans)
 }
