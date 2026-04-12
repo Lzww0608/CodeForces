@@ -9,8 +9,7 @@ import (
 const N int = 26
 
 type Trie struct {
-	next  [N]*Trie
-	isEnd bool
+	next [N]*Trie
 }
 
 func main() {
@@ -26,25 +25,10 @@ func main() {
 
 	ans := 0
 	root := &Trie{}
-	insert := func(a string) {
-		cur := root
-		for i := 0; i < len(a); i++ {
-			c := a[i] - 'a'
-			if cur.next[c] == nil {
-				cur.next[c] = &Trie{}
-			}
-			cur = cur.next[c]
-		}
-
-		if !cur.isEnd {
-			ans++
-		}
-		cur.isEnd = true
-
-	}
 
 	for i := range n {
 		cnt := 0
+		cur := root
 		for j := i; j < n; j++ {
 			x := int(s[j] - 'a')
 			if t[x] == '0' {
@@ -55,7 +39,11 @@ func main() {
 				break
 			}
 
-			insert(s[i : j+1])
+			if cur.next[x] == nil {
+				cur.next[x] = &Trie{}
+				ans++
+			}
+			cur = cur.next[x]
 		}
 	}
 
