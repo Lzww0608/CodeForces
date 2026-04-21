@@ -16,19 +16,37 @@ func main() {
 	var s string
 	fmt.Fscan(in, &s)
 
+	if k == 0 {
+		ans := 0
+		cnt := 0
+		for i := range s {
+			if s[i] == '1' {
+				cnt = 0
+			} else {
+				cnt++
+				ans += cnt
+			}
+		}
+
+		fmt.Fprintln(out, ans)
+		return
+	}
+
 	ans := 0
+	cnt := 0
 	l, r := 0, 0
-	for cnt := 0; r < len(s) && cnt < k; r++ {
+	for r < len(s) && cnt < k {
 		if s[r] == '1' {
 			cnt++
 		}
+		r++
 	}
-	if r == len(s) {
+	if cnt < k {
 		fmt.Fprintln(out, 0)
 		return
 	}
 
-	for r < len(s) {
+	for {
 		x, y := 0, 0
 		for l < len(s) && s[l] != '1' {
 			l++
@@ -40,6 +58,10 @@ func main() {
 		}
 
 		ans += (x + 1) * (y + 1)
+
+		if r == len(s) {
+			break
+		}
 		l++
 		r++
 	}
