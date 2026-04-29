@@ -21,11 +21,12 @@ func solve(in *bufio.Reader, out *bufio.Writer) {
 	var n, c int
 	fmt.Fscan(in, &n, &c)
 	a := make([]int, n)
-	mx := 0
+	mx, p := 0, -1
 	for i := range a {
 		fmt.Fscan(in, &a[i])
-		if a[i] > mx {
+		if i > 0 && a[i] > mx {
 			mx = a[i]
+			p = i
 		}
 	}
 
@@ -34,24 +35,23 @@ func solve(in *bufio.Reader, out *bufio.Writer) {
 		return
 	}
 
+	all := max(a[0]+c, mx)
+	if all == a[0]+c {
+		p = 0
+	}
 	sum := c
-	pre := a[0] + c
-	f := true
 	for i, x := range a {
-		if x == mx && pre < mx && f {
-			fmt.Fprintf(out, "%d ", 0)
+		ans := 0
+		if i == p {
+			ans = 0
+		} else if sum+x >= mx {
+			ans = i
 		} else {
-			sum += x
-			if sum >= mx {
-				fmt.Fprintf(out, "%d ", i)
-			} else {
-				fmt.Fprintf(out, "%d ", i+1)
-			}
+			ans = i + 1
 		}
 
-		if x == mx {
-			f = false
-		}
+		fmt.Fprintf(out, "%d ", ans)
+		sum += x
 	}
 
 	fmt.Fprintln(out)

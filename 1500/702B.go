@@ -21,7 +21,7 @@ func main() {
 	cnt := make(map[int]int)
 	ans := 0
 	for _, x := range a {
-		for y := 1; y < (1 << 30); y <<= 1 {
+		for y := 1; y <= (1 << 30); y <<= 1 {
 			ans += cnt[y-x]
 		}
 		cnt[x]++
