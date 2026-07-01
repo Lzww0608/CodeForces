@@ -69,7 +69,7 @@ func main() {
 	}
 
 	if k > 0 {
-		fmt.Fprintln(out, k)
+		fmt.Fprintln(out, k&1)
 		return
 	}
 
